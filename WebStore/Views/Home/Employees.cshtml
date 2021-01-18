@@ -9,32 +9,34 @@
 <body>
     <h3>Сотрудники</h3>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Фамилия</th>
-                <th scope="col">Имя</th>
-                <th scope="col">Отчество</th>
-                <th scope="col">Возраст</th>
-                <th scope="col">Зарплата</th>
-                <th scope="col">Телефон</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var employee in Model)
-            {
-                <tr>
-                    <td>@employee.Id</td>
-                    <td>@employee.LastName</td>
-                    <td>@employee.FirstName</td>
-                    <td>@employee.Patronymic</td>
-                    <td>@employee.Age</td>
-                    <td>@employee.Salary</td>
-                    <td>@employee.Phone</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Фамилия</th>
+        <th scope="col">Имя</th>
+        <th scope="col">Отчество</th>
+        <th scope="col">Возраст</th>
+        <th scope="col">Зарплата</th>
+        <th scope="col">Телефон</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var employee in Model)
+    {
+        <tr>
+            <td>@employee.Id</td>
+            <td>@employee.LastName</td>
+            <td>@employee.FirstName</td>
+            <td>@employee.Patronymic</td>
+            <td>@employee.Age</td>
+            <td>@employee.Salary</td>
+            <td>@employee.Phone</td>
+        </tr>
+    }
+    </tbody>
+</table>
+<hr />
+<a href="~/">Домой</a>
 </body>
 </html>

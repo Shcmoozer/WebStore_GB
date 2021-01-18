@@ -43,7 +43,7 @@ namespace WebStore.Controllers
             }
         };
 
-        public IActionResult Index() => View("SecondView");
+        public IActionResult Index() => View(/*"SecondView"*/);
 
         public IActionResult SecondAction()
         {
