@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +37,7 @@ namespace WebStore
 
             app.UseEndpoints(endpoints =>
             {
+                //проекция запроса на действие
                 endpoints.MapGet("/greetings", async context =>
                 {
                     await context.Response.WriteAsync(Configuration["Greetings"]);
@@ -44,8 +45,8 @@ namespace WebStore
                 endpoints.MapControllerRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
-                //http://localhost:5000/ -> controller = "Home" action = "Index" �������� = null
-                //http://localhost:5000/Catalog/Products/5 -> controller = "Catalog" action = "Products" �������� = 5
+                //http://localhost:5000/ -> controller = "Home" action = "Index" параметр = null
+                //http://localhost:5000/Catalog/Products/5 -> controller = "Catalog" action = "Products" параметр = 5
             });
         }
     }
