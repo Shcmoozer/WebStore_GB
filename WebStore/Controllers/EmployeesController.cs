@@ -31,7 +31,7 @@ namespace WebStore.Controllers
             return View(employee);
         }
 
-        
+        public IActionResult Create() => View("Edit", new EmployeeViewModel());
 
         #region Edit
 
@@ -73,7 +73,10 @@ namespace WebStore.Controllers
                 Phone = model.Phone
             };
 
-            _EmployeesData.Update(employee);
+            if (employee.Id == 0)
+                _EmployeesData.Add(employee);
+            else
+                _EmployeesData.Update(employee);
 
             return RedirectToAction("Index");
         }
