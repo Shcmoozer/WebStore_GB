@@ -50,8 +50,8 @@ namespace WebStore.Controllers
             return View(new EmployeeViewModel
             {
                 Id = employee.Id,
-                LastName = employee.LastName,
-                Name = employee.FirstName,
+                Name = employee.LastName,
+                LastName = employee.FirstName,
                 MiddleName = employee.Patronymic,
                 Age = employee.Age,
                 Salary = employee.Salary,
@@ -67,23 +67,31 @@ namespace WebStore.Controllers
             if (model is null)
                 throw new ArgumentNullException(nameof(model));
 
-            var employee = new Employee
+            if (model.Name == "Усама" && model.MiddleName == "бен" && model.LastName == "Ладен")
+                ModelState.AddModelError("", "Террористов не берем!");
+
+            if (ModelState.IsValid)
             {
-                Id = model.Id,
-                LastName = model.LastName,
-                FirstName = model.Name,
-                Patronymic = model.MiddleName,
-                Age = model.Age,
-                Salary = model.Salary,
-                Phone = model.Phone
-            };
+                var employee = new Employee
+                {
+                    Id = model.Id,
+                    FirstName = model.LastName,
+                    LastName = model.Name,
+                    Patronymic = model.MiddleName,
+                    Age = model.Age,
+                    Salary = model.Salary,
+                    Phone = model.Phone
+                };
 
-            if (employee.Id == 0)
-                _EmployeesData.Add(employee);
-            else
-                _EmployeesData.Update(employee);
+                if (employee.Id == 0)
+                    _EmployeesData.Add(employee);
+                else
+                    _EmployeesData.Update(employee);
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
         }
 
         #endregion
@@ -117,7 +125,7 @@ namespace WebStore.Controllers
         {
             _EmployeesData.Delete(id);
             return RedirectToAction("Index");
-        } 
+        }
 
         #endregion
     }
