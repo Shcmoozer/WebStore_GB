@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -26,14 +27,31 @@ namespace WebStore
         {
             services.AddTransient<IEmployeesData, InMemoryEmployeesData>();
 
+            //services.AddTransient<>();
+            //services.AddScoped<>();
+            //services.AddSingleton<>();
+
             //services.AddMvc(/*opt=>opt.Conventions.Add(new TestControllerModelConvention())*/);
             services
                 .AddControllersWithViews(/*opt=>opt.Conventions.Add(new TestControllerModelConvention())*/)
                 .AddRazorRuntimeCompilation();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env/*, IServiceProvider service*/)
         {
+            //var employees1 = service.GetService<IEmployeesData>();
+            //var employees2 = service.GetService<IEmployeesData>();
+
+            //var hash1 = employees1.GetHashCode();
+            //var hash2 = employees2.GetHashCode();
+
+            //using (var scope = service.CreateScope())
+            //{
+            //    var employees3 = scope.ServiceProvider.GetService<IEmployeesData>();
+
+            //    var hash3 = employees1.GetHashCode();
+            //}
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -53,9 +71,9 @@ namespace WebStore
                 context => context.Run(async request => await request.Response.WriteAsync("Hello with id == 5!"))
             );
 
-            app.Map("/hello", context =>context.Run(async request => await request.Response.WriteAsync("Hello!!!")));
+            app.Map("/hello", context => context.Run(async request => await request.Response.WriteAsync("Hello!!!")));
 
-            
+
 
             //var greetings = Configuration["Greetings"];
 
