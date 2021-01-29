@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\Components\Brands - Копировать\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
