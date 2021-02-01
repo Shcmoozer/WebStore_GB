@@ -13,6 +13,8 @@ using WebStore.Infrastructure.Conventions;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Infrastructure.Middleware;
 using WebStore.Infrastructure.Services;
+using WebStore.Infrastructure.Services.InMemory;
+using WebStore.Infrastructure.Services.InSQL;
 
 namespace WebStore
 {
@@ -32,33 +34,18 @@ namespace WebStore
             services.AddTransient<WebStoreDbInitializer>();
 
             services.AddTransient<IEmployeesData, InMemoryEmployeesData>();
-            services.AddTransient<IProductData, InMemoryProductData>();
+            //services.AddTransient<IProductData, InMemoryProductData>();
+            services.AddTransient<IProductData, SqlProductData>();
 
-            //services.AddTransient<>();
-            //services.AddScoped<>();
-            //services.AddSingleton<>();
-
-            //services.AddMvc(/*opt=>opt.Conventions.Add(new TestControllerModelConvention())*/);
             services
-                .AddControllersWithViews(/*opt=>opt.Conventions.Add(new TestControllerModelConvention())*/)
+                .AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebStoreDbInitializer db)
         {
             db.Initialize();
-            //var employees1 = service.GetService<IEmployeesData>();
-            //var employees2 = service.GetService<IEmployeesData>();
 
-            //var hash1 = employees1.GetHashCode();
-            //var hash2 = employees2.GetHashCode();
-
-            //using (var scope = service.CreateScope())
-            //{
-            //    var employees3 = scope.ServiceProvider.GetService<IEmployeesData>();
-
-            //    var hash3 = employees1.GetHashCode();
-            //}
 
             if (env.IsDevelopment())
             {
