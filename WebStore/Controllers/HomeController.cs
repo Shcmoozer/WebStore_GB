@@ -29,5 +29,7 @@ namespace WebStore.Controllers
 
         public IActionResult NotFound404() => View();
 
+
+        public IActionResult Test() => Content("Test");
     }
 }
