@@ -116,6 +116,11 @@ namespace WebStore
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
                 //проекция запроса на действие
                 endpoints.MapGet("/greetings", async context =>
                 {
