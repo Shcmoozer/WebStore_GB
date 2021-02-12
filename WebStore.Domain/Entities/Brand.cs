@@ -15,6 +15,6 @@ namespace WebStore.Domain.Entities
         //[Column("BrandOrder")]
         public int Order { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
