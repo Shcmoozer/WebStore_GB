@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebStore.DAL.Sqlite\WebStore.DAL.Sqlite.csproj" />
+    <ProjectReference Include="..\WebStore.DAL\WebStore.DAL.csproj" />
+    <ProjectReference Include="..\WebStore.Interfaces\WebStore.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>
