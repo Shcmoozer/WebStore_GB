@@ -14,9 +14,9 @@ namespace WebStore.Controllers
 
         public IActionResult BlogSingle() => View();
 
-        public IActionResult Cart() => View();
+        //public IActionResult Cart() => View();
 
-        public IActionResult Checkout() => View();
+       // public IActionResult Checkout() => View();
 
         public IActionResult ContactUs() => View();
 
@@ -24,9 +24,9 @@ namespace WebStore.Controllers
 
         public IActionResult ProductDetails() => View();
 
-        public IActionResult Shop() => View();
+        //public IActionResult Shop() => View();
 
-        public IActionResult NotFound404() => View();
+        //public IActionResult NotFound404() => View();
 
 
         public IActionResult Test() => Content("Test");
