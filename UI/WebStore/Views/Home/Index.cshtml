@@ -6,6 +6,7 @@
         .GetProducts()
         .OrderBy(p => p.Order)
         .Take(6)
+        .FromDTO()
         .ToView();
 }
 
