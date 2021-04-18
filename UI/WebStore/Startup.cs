@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Hosting;
 using WebStore.Clients.Employees;
+using WebStore.Clients.Orders;
 using WebStore.Clients.Products;
 using WebStore.Clients.Values;
 using WebStore.DAL.Context;
@@ -103,7 +104,8 @@ namespace WebStore
             //services.AddTransient<IProductData, SqlProductData>();
             services.AddTransient<IProductData, ProductsClient>();
             services.AddTransient<ICartService, InCookiesCartService>();
-            services.AddTransient<IOrderService, SqlOrderService>();
+            //services.AddTransient<IOrderService, SqlOrderService>();
+            services.AddTransient<IOrderService, OrdersClient>();
 
             services.AddScoped<IValuesService, ValuesClient>();
 
