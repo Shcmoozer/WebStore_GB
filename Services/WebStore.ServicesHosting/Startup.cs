@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -86,7 +87,24 @@ namespace WebStore.ServicesHosting
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebStore.ServicesHosting", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebStore.ServiceHosting", Version = "v1" });
+
+                const string webstore_api_xml = "WebStore.ServicesHosting.xml";
+                const string webstore_domain_xml = "WebStore.Domain.xml";
+                const string debug_path = "bin/debug/net5.0";
+
+                //c.IncludeXmlComments("WebStore.ServiceHosting.xml");
+                //c.IncludeXmlComments("WebStore.Domain.xml");
+
+                if (File.Exists(webstore_api_xml))
+                    c.IncludeXmlComments(webstore_api_xml);
+                else if (File.Exists(Path.Combine(debug_path, webstore_api_xml)))
+                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_api_xml));
+
+                if (File.Exists(webstore_domain_xml))
+                    c.IncludeXmlComments(webstore_domain_xml);
+                else if (File.Exists(Path.Combine(debug_path, webstore_domain_xml)))
+                    c.IncludeXmlComments(Path.Combine(debug_path, webstore_domain_xml));
             });
         }
 
