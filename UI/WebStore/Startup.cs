@@ -122,6 +122,8 @@ namespace WebStore
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
             app.UseWelcomePage("/welcome");
 
             app.UseMiddleware<TestMiddleware>();

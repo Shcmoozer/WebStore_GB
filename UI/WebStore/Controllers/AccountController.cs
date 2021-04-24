@@ -90,21 +90,24 @@ namespace WebStore.Controllers
                 Model.RememberMe,
 #if DEBUG
                 false
-#else 
+#else
                 true
 #endif
-                );
+            );
 
             if (login_result.Succeeded)
             {
-                return LocalRedirect(Model.ReturnUrl ?? "/");
+                _Logger.LogInformation("Пользователь {0} вошёл в систему", Model.UserName);
+
                 //if (Url.IsLocalUrl(Model.ReturnUrl))
                 //    return Redirect(Model.ReturnUrl);
                 //return RedirectToAction("Index", "Home");
+                return LocalRedirect(Model.ReturnUrl ?? "/");
             }
 
-            ModelState.AddModelError("", "Неверное имя пользователя, или пароль!");
+            _Logger.LogWarning("Ошибка при вводе имени пользователя {0} либо пароля", Model.UserName);
 
+            ModelState.AddModelError("", "Неверное имя пользователя, или пароль!");
             return View(Model);
         }
 
@@ -112,7 +115,11 @@ namespace WebStore.Controllers
 
         public async Task<IActionResult> Logout()
         {
+            var user_name = User.Identity!.Name;
             await _SignInManager.SignOutAsync();
+
+            _Logger.LogInformation("Пользователь {0} вышел из системы", user_name);
+
             return RedirectToAction("Index", "Home");
         }
 
