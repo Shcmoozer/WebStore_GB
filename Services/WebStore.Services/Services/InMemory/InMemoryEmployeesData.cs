@@ -22,6 +22,9 @@ namespace WebStore.Services.Services.InMemory
 
         public Employee Get(int id) => _Employees.FirstOrDefault(employee => employee.Id == id);
 
+        public Employee GetByName(string LastName, string FirstName, string Patronymic) =>
+            _Employees.FirstOrDefault(e => e.LastName == LastName && e.FirstName == FirstName && e.Patronymic == Patronymic);
+
         public int Add(Employee employee)
         {
             if (employee is null) throw new ArgumentNullException(nameof(employee));
@@ -34,6 +37,19 @@ namespace WebStore.Services.Services.InMemory
             _Employees.Add(employee);
 
             return employee.Id;
+        }
+
+        public Employee Add(string LastName, string FirstName, string Patronymic, int Age)
+        {
+            var employee = new Employee
+            {
+                LastName = LastName,
+                FirstName = FirstName,
+                Patronymic = Patronymic,
+                Age = Age
+            };
+            Add(employee);
+            return employee;
         }
 
         public void Update(Employee employee)

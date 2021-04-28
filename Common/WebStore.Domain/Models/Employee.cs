@@ -16,5 +16,6 @@
 
         public string Phone { get; set; }
 
+        public override string ToString() => $"{LastName} {FirstName} {Patronymic} {Age} лет {Salary} {Phone}";
     }
 }
