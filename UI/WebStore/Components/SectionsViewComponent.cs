@@ -28,7 +28,7 @@ namespace WebStore.Components
                     Id = s.Id,
                     Name = s.Name,
                     Order = s.Order,
-                    ProductsCount = s.FromDTO().Products.Count(),
+                    ProductsCount = s.ProductsCount,
                 })
                 .ToList();
 
@@ -44,7 +44,7 @@ namespace WebStore.Components
                         Name = child_section.Name,
                         Order = child_section.Order,
                         Parent = parent_section,
-                        ProductsCount = child_section.FromDTO().Products.Count(),
+                        ProductsCount = child_section.ProductsCount,
                     });
 
                 parent_section.ChildSections.Sort(OrderSortMethod);
