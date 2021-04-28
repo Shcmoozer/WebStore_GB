@@ -28,7 +28,7 @@ namespace WebStore.Components
                     Id = s.Id,
                     Name = s.Name,
                     Order = s.Order,
-                    ProductsCount = s.FromDTO().Products.Count(),
+                    ProductsCount = s.ProductsCount,
                 })
                 .ToList();
 
