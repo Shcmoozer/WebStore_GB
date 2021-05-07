@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Logs\" />
+    <Folder Include="Log\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
