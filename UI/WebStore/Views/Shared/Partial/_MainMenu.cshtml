@@ -20,5 +20,14 @@
     <li><a href="404.html">404</a></li>
     <li><a asp-controller="Home" asp-action="ContactUs">Contact</a></li>
     <li><a asp-controller="Employees" asp-action="Index">Employees</a></li>
-    <li><a asp-controller="WebAPI" asp-action="Index">WebAPI</a></li>
+    <li><a asp-controller="WebAPI" asp-action="Index" class="@IsActive("WebAPI")">WebAPI</a></li>
 </ul>
+
+@functions
+{
+    string IsActive(string Controller, string Action = "Index") =>
+        Equals(Controller, ViewContext.RouteData.Values["Controller"])
+        && Equals(Action, ViewContext.RouteData.Values["Action"])
+            ? "active"
+            : null;
+}
