@@ -41,39 +41,39 @@ namespace WebStore.Services.Tests.Services
             _ProductDataMock = new Mock<IProductData>();
             _ProductDataMock
                .Setup(c => c.GetProducts(It.IsAny<ProductFilter>()))
-               .Returns(new[]
-                {
-                    new ProductDTO
-                    {
-                        Id = 1,
-                        Name = "Product 1",
-                        Price = 1.1m,
-                        Order = 1,
-                        ImageUrl = "Img_1.png",
-                        Brand = new BrandDTO { Id = 1, Name = "Brand 1", Order = 1 },
-                        Section = new SectionDTO{Id = 1, Name = "Section 1", Order = 1 }
-                    },
-                    new ProductDTO
-                    {
-                        Id = 2,
-                        Name = "Product 2",
-                        Price = 2.2m,
-                        Order = 2,
-                        ImageUrl = "Img_2.png",
-                        Brand = new BrandDTO { Id = 2, Name = "Brand 2", Order = 2 },
-                        Section = new SectionDTO{Id = 2, Name = "Section 2", Order = 2 }
-                    },
-                    new ProductDTO
-                    {
-                        Id = 3,
-                        Name = "Product 3",
-                        Price = 3.3m,
-                        Order = 3,
-                        ImageUrl = "Img_3.png",
-                        Brand = new BrandDTO { Id = 3, Name = "Brand 3", Order = 3 },
-                        Section = new SectionDTO{Id = 3, Name = "Section 3", Order = 3 }
-                    },
-                });
+               .Returns(new PageProductsDTO(new[]
+               {
+                   new ProductDTO
+                   {
+                       Id = 1,
+                       Name = "Product 1",
+                       Price = 1.1m,
+                       Order = 1,
+                       ImageUrl = "Img_1.png",
+                       Brand = new BrandDTO { Id = 1, Name = "Brand 1", Order = 1 },
+                       Section = new SectionDTO{Id = 1, Name = "Section 1", Order = 1 }
+                   },
+                   new ProductDTO
+                   {
+                       Id = 2,
+                       Name = "Product 2",
+                       Price = 2.2m,
+                       Order = 2,
+                       ImageUrl = "Img_2.png",
+                       Brand = new BrandDTO { Id = 2, Name = "Brand 2", Order = 2 },
+                       Section = new SectionDTO{Id = 2, Name = "Section 2", Order = 2 }
+                   },
+                   new ProductDTO
+                   {
+                       Id = 3,
+                       Name = "Product 3",
+                       Price = 3.3m,
+                       Order = 3,
+                       ImageUrl = "Img_3.png",
+                       Brand = new BrandDTO { Id = 3, Name = "Brand 3", Order = 3 },
+                       Section = new SectionDTO{Id = 3, Name = "Section 3", Order = 3 }
+                   },
+               }, 3));
 
             _CartStoreMock = new Mock<ICartStore>();
             _CartStoreMock.Setup(c => c.Cart).Returns(_Cart);
