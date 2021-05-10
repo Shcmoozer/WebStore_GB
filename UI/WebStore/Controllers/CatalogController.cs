@@ -25,7 +25,8 @@ namespace WebStore.Controllers
         public IActionResult Index(int? BrandId, int? SectionId, int Page = 1, int? PageSize = null)
         {
             var page_size = PageSize
-                            ?? (int.TryParse(_Configuration[__CatalogPageSize], out var value) ? value : null);
+                ?? (int.TryParse(_Configuration[__CatalogPageSize], out var value) ? value : null);
+
             var filter = new ProductFilter
             {
                 BrandId = BrandId,
@@ -41,9 +42,9 @@ namespace WebStore.Controllers
                 SectionId = SectionId,
                 BrandId = BrandId,
                 Products = products
-                    .OrderBy(p => p.Order)
-                    .FromDTO()
-                    .ToView(),
+                   .OrderBy(p => p.Order)
+                   .FromDTO()
+                   .ToView(),
                 PageViewModel = new PageViewModel
                 {
                     Page = Page,
@@ -56,6 +57,7 @@ namespace WebStore.Controllers
         public IActionResult Details(int id)
         {
             var product = _ProductData.GetProductById(id);
+            if (product is null) return NotFound();
 
             return View(product.FromDTO().ToView());
         }
@@ -73,11 +75,10 @@ namespace WebStore.Controllers
                 Page = Page,
                 PageSize = PageSize ?? (int.TryParse(_Configuration[__CatalogPageSize], out var size) ? size : null)
             })
-                .Products.OrderBy(p => p.Order)
-                .FromDTO()
-                .ToView();
+               .Products.OrderBy(p => p.Order)
+               .FromDTO()
+               .ToView();
 
         #endregion
-
     }
 }
