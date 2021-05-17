@@ -41,25 +41,32 @@ namespace WebStore.Controllers
                 UserName = Model.UserName
             };
 
-            var registration_result = await _UserManager.CreateAsync(user, Model.Password);
-            if (registration_result.Succeeded)
+            //_Logger.LogInformation("Регистрация пользователя {0}", user.UserName);
+            using (_Logger.BeginScope("Регистрация пользователя {0}", Model.UserName))
             {
-                _Logger.LogInformation("Пользователь {0} успешно зарегистрирован", Model.UserName);
+                var registration_result = await _UserManager.CreateAsync(user, Model.Password);
+                if (registration_result.Succeeded)
+                {
+                    _Logger.LogInformation("Пользователь {0} успешно зарегистрирован", user.UserName);
 
-                await _UserManager.AddToRoleAsync(user, Role.Users);
-                _Logger.LogInformation("Пользователь {0} наделен ролью {1}", Model.UserName, Role.Users);
+                    await _UserManager.AddToRoleAsync(user, Role.Users);
 
-                await _SignInManager.SignInAsync(user, false);
+                    _Logger.LogInformation("Пользователь {0} наделён ролью {1}", user.UserName, Role.Users);
 
-                return RedirectToAction("Index", "Home");
+                    await _SignInManager.SignInAsync(user, false);
+
+                    _Logger.LogInformation("Пользователь {0} вошёл в систему сразу после регистрации", user.UserName);
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                _Logger.LogWarning("Ошибка при регистрации пользователя {0}: {1}",
+                    user.UserName,
+                    string.Join(",", registration_result.Errors.Select(e => e.Description)));
+
+                foreach (var error in registration_result.Errors)
+                    ModelState.AddModelError("", error.Description);
             }
-
-            _Logger.LogWarning("В процессе регистрации пользователя {0} возникли ошибки {1}",
-                Model.UserName,
-                string.Join(',', registration_result.Errors.Select(e => e.Description)));
-
-            foreach (var error in registration_result.Errors)
-                ModelState.AddModelError("", error.Description);
 
             return View(Model);
         }
@@ -83,21 +90,24 @@ namespace WebStore.Controllers
                 Model.RememberMe,
 #if DEBUG
                 false
-#else 
+#else
                 true
 #endif
-                );
+            );
 
             if (login_result.Succeeded)
             {
-                return LocalRedirect(Model.ReturnUrl ?? "/");
+                _Logger.LogInformation("Пользователь {0} вошёл в систему", Model.UserName);
+
                 //if (Url.IsLocalUrl(Model.ReturnUrl))
                 //    return Redirect(Model.ReturnUrl);
                 //return RedirectToAction("Index", "Home");
+                return LocalRedirect(Model.ReturnUrl ?? "/");
             }
 
-            ModelState.AddModelError("", "Неверное имя пользователя, или пароль!");
+            _Logger.LogWarning("Ошибка при вводе имени пользователя {0} либо пароля", Model.UserName);
 
+            ModelState.AddModelError("", "Неверное имя пользователя, или пароль!");
             return View(Model);
         }
 
@@ -105,7 +115,11 @@ namespace WebStore.Controllers
 
         public async Task<IActionResult> Logout()
         {
+            var user_name = User.Identity!.Name;
             await _SignInManager.SignOutAsync();
+
+            _Logger.LogInformation("Пользователь {0} вышел из системы", user_name);
+
             return RedirectToAction("Index", "Home");
         }
 
