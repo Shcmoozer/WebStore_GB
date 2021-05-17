@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Mapping;
+using WebStore.ViewModels;
 
 namespace WebStore.Components
 {
@@ -16,8 +17,30 @@ namespace WebStore.Components
 
         public SectionsViewComponent(IProductData ProductData) => _ProductData = ProductData;
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string SectionId)
         {
+            var section_id = int.TryParse(SectionId, out var id) ? id : (int?)null;
+
+            var sections = GetSections(section_id, out var parent_section_id);
+
+            ViewBag.SectionId = section_id;
+            //ViewBag.ParentSectionId = parent_section_id;
+            ViewData["ParentSectionId"] = parent_section_id;
+
+            return View(new SelectableSectionsViewModel()
+            {
+                Sections = sections,
+                SectionId = section_id,
+                ParentSectionId = parent_section_id
+            });
+        }
+
+        //public async Task<IViewComponentResult> InvokeAsync() => View();
+
+        private IEnumerable<SectionViewModel> GetSections(int? SectionId, out int? ParentSectionId)
+        {
+            ParentSectionId = null;
+
             var sections = _ProductData.GetSections();
 
             var parent_sections = sections.Where(s => s.ParentId is null);
@@ -38,6 +61,10 @@ namespace WebStore.Components
                 var childs = sections.Where(s => s.ParentId == parent_section.Id);
 
                 foreach (var child_section in childs)
+                {
+                    if (child_section.Id == SectionId)
+                        ParentSectionId = child_section.ParentId;
+
                     parent_section.ChildSections.Add(new SectionViewModel
                     {
                         Id = child_section.Id,
@@ -46,14 +73,14 @@ namespace WebStore.Components
                         Parent = parent_section,
                         ProductsCount = child_section.ProductsCount,
                     });
+                }
+                    
 
                 parent_section.ChildSections.Sort(OrderSortMethod);
             }
             parent_sections_views.Sort(OrderSortMethod);
 
-            return View(parent_sections_views);
+            return parent_sections_views;
         }
-
-        //public async Task<IViewComponentResult> InvokeAsync() => View();
     }
 }
