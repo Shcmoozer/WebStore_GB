@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.Hosting;
 using WebStore.Clients.Employees;
+using WebStore.Clients.Identity;
 using WebStore.Clients.Orders;
 using WebStore.Clients.Products;
 using WebStore.Clients.Values;
@@ -37,33 +38,25 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection_strng_name = Configuration["ConnectionString"];
-            //services.AddDbContext<WebStoreDB>(opt => opt.UseSqlite(Configuration.GetConnectionString("Sqlite")));
-
-            switch (connection_strng_name)
-            {
-                default: throw new InvalidOperationException($"Подключение {connection_strng_name} не поддерживается");
-                case "SqlServer":
-                    services.AddDbContext<WebStoreDB>(opt =>
-                        opt.UseSqlServer(Configuration.GetConnectionString(connection_strng_name))
-                            .UseLazyLoadingProxies()
-                    );
-                    break;
-                case "Sqlite":
-                    services.AddDbContext<WebStoreDB>(opt =>
-                        opt.UseSqlite(Configuration.GetConnectionString(connection_strng_name), o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
-                    break;
-            }
-
-            services.AddDbContext<WebStoreDB>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString(connection_strng_name))
-                    .UseLazyLoadingProxies()
-            );
-            services.AddTransient<WebStoreDbInitializer>();
 
             services.AddIdentity<User, Role>(/*opt => { }*/)
-                .AddEntityFrameworkStores<WebStoreDB>()
+                .AddIdentityWebStoreWebAPIClients()
                 .AddDefaultTokenProviders();
+
+            //#region Identity stores custom implementations
+
+            //services.AddTransient<IUserStore<User>, UsersClient>();
+            //services.AddTransient<IUserRoleStore<User>, UsersClient>();
+            //services.AddTransient<IUserPasswordStore<User>, UsersClient>();
+            //services.AddTransient<IUserEmailStore<User>, UsersClient>();
+            //services.AddTransient<IUserPhoneNumberStore<User>, UsersClient>();
+            //services.AddTransient<IUserTwoFactorStore<User>, UsersClient>();
+            //services.AddTransient<IUserClaimStore<User>, UsersClient>();
+            //services.AddTransient<IUserLoginStore<User>, UsersClient>();
+
+            //services.AddTransient<IRoleStore<Role>, RolesClient>();
+
+            //#endregion
 
             services.Configure<IdentityOptions>(opt =>
             {
@@ -98,13 +91,9 @@ namespace WebStore
                 opt.SlidingExpiration = true;
             });
 
-            //services.AddTransient<IEmployeesData, InMemoryEmployeesData>();
             services.AddTransient<IEmployeesData, EmployeesClient>();
-            //services.AddTransient<IProductData, InMemoryProductData>();
-            //services.AddTransient<IProductData, SqlProductData>();
             services.AddTransient<IProductData, ProductsClient>();
             services.AddTransient<ICartService, InCookiesCartService>();
-            //services.AddTransient<IOrderService, SqlOrderService>();
             services.AddTransient<IOrderService, OrdersClient>();
 
             services.AddScoped<IValuesService, ValuesClient>();
@@ -114,10 +103,8 @@ namespace WebStore
                 .AddRazorRuntimeCompilation();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, WebStoreDbInitializer db)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            db.Initialize();
-
 
             if (env.IsDevelopment())
             {

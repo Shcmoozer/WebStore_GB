@@ -342,3 +342,5 @@ healthchecksdb
 /WebStore/wwwroot/js/site.*
 /WebStore/wwwroot/css/site.*
 /WebStore/WebStore.db
+/Services/WebStore.ServicesHosting/WebStore.ServicesHosting.xml
+/Common/WebStore.Domain/WebStore.Domain.xml
