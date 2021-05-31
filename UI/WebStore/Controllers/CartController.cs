@@ -10,33 +10,33 @@ namespace WebStore.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICartService _CartService;
+        private readonly ICartService _CartServices;
 
-        public CartController(ICartService CartService) => _CartService = CartService;
+        public CartController(ICartService CartServices) => _CartServices = CartServices;
 
-        public IActionResult Index() => View(new CartOrderViewModel { Cart = _CartService.GetViewModel() });
+        public IActionResult Index() => View(new CartOrderViewModel { Cart = _CartServices.GetViewModel() });
 
         public IActionResult Add(int id)
         {
-            _CartService.Add(id);
+            _CartServices.Add(id);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Remove(int id)
         {
-            _CartService.Remove(id);
+            _CartServices.Remove(id);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Decrement(int id)
         {
-            _CartService.Decrement(id);
+            _CartServices.Decrement(id);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Clear()
         {
-            _CartService.Clear();
+            _CartServices.Clear();
             return RedirectToAction(nameof(Index));
         }
 
@@ -46,8 +46,8 @@ namespace WebStore.Controllers
             if (!ModelState.IsValid)
                 return View(nameof(Index), new CartOrderViewModel
                 {
-                    Cart = _CartService.GetViewModel(),
-                    Order = OrderModel,
+                    Cart = _CartServices.GetViewModel(),
+                    Order = OrderModel
                 });
 
             //var order = await OrderService.CreateOrder(
@@ -59,7 +59,7 @@ namespace WebStore.Controllers
             var order_model = new CreateOrderModel
             {
                 Order = OrderModel,
-                Items = _CartService.GetViewModel().Items.Select(item => new OrderItemDTO
+                Items = _CartServices.GetViewModel().Items.Select(item => new OrderItemDTO
                 {
                     Id = item.Product.Id,
                     Price = item.Product.Price,
@@ -69,7 +69,7 @@ namespace WebStore.Controllers
 
             var order = await OrderService.CreateOrder(User.Identity!.Name, order_model);
 
-            _CartService.Clear();
+            _CartServices.Clear();
 
             return RedirectToAction(nameof(OrderConfirmed), new { order.Id });
         }
@@ -86,25 +86,25 @@ namespace WebStore.Controllers
 
         public IActionResult AddAPI(int id)
         {
-            _CartService.Add(id);
+            _CartServices.Add(id);
             return Json(new { id, message = $"Товар с id:{id} был добавлен в корзину" });
         }
 
         public IActionResult RemoveAPI(int id)
         {
-            _CartService.Remove(id);
+            _CartServices.Remove(id);
             return Ok(new { id, message = $"Товар с id:{id} был удалён из корзины" });
         }
 
         public IActionResult DecrementAPI(int id)
         {
-            _CartService.Decrement(id);
+            _CartServices.Decrement(id);
             return Ok();
         }
 
         public IActionResult ClearAPI()
         {
-            _CartService.Clear();
+            _CartServices.Clear();
             return Ok();
         }
 
